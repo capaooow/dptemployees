@@ -35,7 +35,7 @@ public class EmployeeDepartment {
   @Column(name = "StartDate")
   private LocalDate startDate;
 
-  // Constructors
+  // Constructor
   public EmployeeDepartment() {
 
   }
