@@ -40,6 +40,15 @@ public class EmployeeDepartment {
 
   }
 
+    public EmployeeDepartment(Integer id, String firstName, String lastName, String jobTitle, String department, LocalDate startDate) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.jobTitle = jobTitle;
+        this.department = department;
+        this.startDate = startDate;
+    }
+
   // Getters and Setters
   public Integer getId() {
     return this.id;
@@ -87,5 +96,9 @@ public class EmployeeDepartment {
 
   public void setStartDate(LocalDate startDate) {
     this.startDate = startDate;
+  }
+  @Override
+  public String toString(){
+      return String.format("%d,%s,%s,%s,%s,%s\n", getId(),getFirstName(),getLastName(),getJobTitle(),getDepartment(),getStartDate());
   }
 }
