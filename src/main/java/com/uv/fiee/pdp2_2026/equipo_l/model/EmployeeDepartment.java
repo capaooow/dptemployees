@@ -12,7 +12,7 @@ import java.time.LocalDate;
  */
 
 @Entity
-@Table(name = "vEmployeeDepartment", schema = "HumanResources")
+@Table(name = "v_employee_department", schema = "human_resources")
 @Immutable
 public class EmployeeDepartment {
 
@@ -38,6 +38,16 @@ public class EmployeeDepartment {
   // Constructor
   public EmployeeDepartment() {
 
+  }
+
+  public EmployeeDepartment(Integer id, String firstName, String lastName, String jobTitle, String department,
+      LocalDate startDate) {
+    this.id = id;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.jobTitle = jobTitle;
+    this.department = department;
+    this.startDate = startDate;
   }
 
   // Getters and Setters
