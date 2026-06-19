@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.util.List;
+import org.hibernate.query.Page;
+import org.springframework.data.domain.Pageable;
 
 /*
  *  Repositorio encargado de las consultas a la vista vEmployeeDepartment.
@@ -13,6 +15,8 @@ import java.util.List;
 
 @Repository
 public interface EmployeeDepartmentRepository extends JpaRepository<EmployeeDepartment, Integer> {
+  @Query("Select BusinessEntityID, FirstName, LastName, JobTitle, Department, StartDate from EmployeeDepartment")
+  List<EmployeeDepartment> findAllEmployee(Pageable pageable);
   /*
    * Busca y retorna la lista de empleados filtrados por su departamento.
    * 
@@ -20,8 +24,14 @@ public interface EmployeeDepartmentRepository extends JpaRepository<EmployeeDepa
    * 
    * @return: Una colección List con los empleados encontrados.
    */
-  List<EmployeeDepartment> findByDepartment(String department);
-
+  @Query("Select BusinessEntityID, FirstName, LastName, JobTitle, StartDate from EmployeeDepartment WHERE department=?1")
+  List<EmployeeDepartment> findByDepartment(String department,Pageable pageable);
+  //Busca un solo empleado por BusinessID
+  @Query("Select FirstName, LastName, JobTitle, StartDate from EmployeeDepartment WHERE BusinessEntityID=?1")
+  EmployeeDepartment findByBusID (Long id);
+  //Busca el empleado mas antiguo
+  @Query("Select FirstName, LastName, JobTitle, StartDate from EmployeeDepartment ORDER BY StartDate ASC LIMIT 1")
+  EmployeeDepartment findOldest();
   /*
    * Busca y retorna la lista de departamentos que existen.
    * 

@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-/home/powoka/Documentos/universidad-veracruzana/periodos/06-periodo/paradigmas-de-programacion-ii/proyecto/dptemployees/src/main/java/com/uv/fiee/pdp2_2026/equipo_l/App.java
-/home/powoka/Documentos/universidad-veracruzana/periodos/06-periodo/paradigmas-de-programacion-ii/proyecto/dptemployees/src/main/java/com/uv/fiee/pdp2_2026/equipo_l/model/EmployeeDepartment.java
-/home/powoka/Documentos/universidad-veracruzana/periodos/06-periodo/paradigmas-de-programacion-ii/proyecto/dptemployees/src/main/java/com/uv/fiee/pdp2_2026/equipo_l/repository/EmployeeDepartmentRepository.java
-=======
 C:\Users\iflme\OneDrive\Documents\NetBeansProjects\DptEmployees\src\main\java\com\uv\fiee\pdp2_2026\equipo_l\App.java
 C:\Users\iflme\OneDrive\Documents\NetBeansProjects\DptEmployees\src\main\java\com\uv\fiee\pdp2_2026\equipo_l\io\EmployeeDpt_IO.java
 C:\Users\iflme\OneDrive\Documents\NetBeansProjects\DptEmployees\src\main\java\com\uv\fiee\pdp2_2026\equipo_l\model\EmployeeDepartment.java
 C:\Users\iflme\OneDrive\Documents\NetBeansProjects\DptEmployees\src\main\java\com\uv\fiee\pdp2_2026\equipo_l\repository\EmployeeDepartmentRepository.java
->>>>>>> implIO
