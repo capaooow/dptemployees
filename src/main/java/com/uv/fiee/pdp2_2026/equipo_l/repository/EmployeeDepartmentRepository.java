@@ -26,12 +26,11 @@ public interface EmployeeDepartmentRepository extends JpaRepository<EmployeeDepa
    */
   @Query("Select BusinessEntityID, FirstName, LastName, JobTitle, StartDate from EmployeeDepartment WHERE department=?1")
   List<EmployeeDepartment> findByDepartment(String department,Pageable pageable);
-  //Busca un solo empleado por BusinessID
-  @Query("Select FirstName, LastName, JobTitle, StartDate from EmployeeDepartment WHERE BusinessEntityID=?1")
-  EmployeeDepartment findByBusID (Long id);
-  //Busca el empleado mas antiguo
   @Query("Select FirstName, LastName, JobTitle, StartDate from EmployeeDepartment ORDER BY StartDate ASC LIMIT 1")
   EmployeeDepartment findOldest();
+  //Busca el empleado mas antiguo de un departamento
+  @Query("Select FirstName, LastName, JobTitle, StartDate from EmployeeDepartment WHERE department=?1 ORDER BY StartDate ASC LIMIT 1")
+  EmployeeDepartment findOldest(String departent);
   /*
    * Busca y retorna la lista de departamentos que existen.
    * 

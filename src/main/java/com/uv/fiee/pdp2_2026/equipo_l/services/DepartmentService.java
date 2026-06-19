@@ -41,18 +41,13 @@ public class DepartmentService implements IDepartmentService{
         );
         return edrepo.findByDepartment(department,pageable);
     }
-
-    @Override
-    public EmployeeDepartment findByBusID(Long id) {
-        return edrepo.findByBusID(id);
-    }
     @Override
     public EmployeeDepartment findOldest(){
         return edrepo.findOldest();
     }
     @Override
     public EmployeeDepartment findOldest(String department){
-        return edrepo.findOldest();
+        return edrepo.findOldest(department);
     }
     @Override
     public List<String> findDistinctDepartments(){

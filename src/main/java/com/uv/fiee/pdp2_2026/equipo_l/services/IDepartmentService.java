@@ -8,15 +8,9 @@ import com.uv.fiee.pdp2_2026.equipo_l.model.EmployeeDepartment;
 import com.uv.fiee.pdp2_2026.equipo_l.model.Page;
 import java.util.List;
 
-
-/**
- *
- * @author iflme
- */
 public interface IDepartmentService {
     List<EmployeeDepartment> getAllEmployees(Page page);
     List<EmployeeDepartment> getAllEmployeesInDpt(String deparment,Page page);
-    EmployeeDepartment findByBusID (Long id);
     EmployeeDepartment findOldest();
     EmployeeDepartment findOldest(String department);
     List<String> findDistinctDepartments();

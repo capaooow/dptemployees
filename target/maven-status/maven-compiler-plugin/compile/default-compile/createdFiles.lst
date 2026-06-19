@@ -1,4 +1,9 @@
-com\uv\fiee\pdp2_2026\equipo_l\model\EmployeeDepartment.class
+com\uv\fiee\pdp2_2026\equipo_l\services\IDepartmentService.class
+com\uv\fiee\pdp2_2026\equipo_l\controller\DepartmentController.class
+com\uv\fiee\pdp2_2026\equipo_l\model\Page.class
+com\uv\fiee\pdp2_2026\equipo_l\services\DepartmentService.class
 com\uv\fiee\pdp2_2026\equipo_l\repository\EmployeeDepartmentRepository.class
 com\uv\fiee\pdp2_2026\equipo_l\App.class
 com\uv\fiee\pdp2_2026\equipo_l\io\EmployeeDpt_IO.class
+com\uv\fiee\pdp2_2026\equipo_l\model\EmployeeDepartment.class
+com\uv\fiee\pdp2_2026\equipo_l\controller\EmployeeController.class

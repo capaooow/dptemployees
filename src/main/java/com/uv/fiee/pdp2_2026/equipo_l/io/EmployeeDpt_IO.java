@@ -17,8 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author iflme
+ * Clase principalmente encargada del IO.
  */
 public class EmployeeDpt_IO {
     public static List<EmployeeDepartment> read(String dir){

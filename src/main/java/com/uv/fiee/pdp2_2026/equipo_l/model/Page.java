@@ -4,10 +4,6 @@
  */
 package com.uv.fiee.pdp2_2026.equipo_l.model;
 
-/**
- *
- * @author iflme
- */
 public record Page(
       int size,
       int number,

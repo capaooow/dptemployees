@@ -3,10 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.uv.fiee.pdp2_2026.equipo_l.controller;
-import com.uv.fiee.pdp2_2026.equipo_l.model.EmployeeDepartment;
 import com.uv.fiee.pdp2_2026.equipo_l.model.Page;
 import com.uv.fiee.pdp2_2026.equipo_l.services.DepartmentService;
-import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,31 +22,32 @@ import org.springframework.web.bind.annotation.*;
 public class EmployeeController {
     @Autowired
     DepartmentService dptService;
-    private String getDepartments(Model model){
-        model.addAttribute("allDepartments", dptService.findDistinctDepartments());
-        return "allDepartments";
-    }
-    private void getEmployee_ID(Model model){
-        model.addAttribute("oldest", dptService.findOldest());
-    }
-    /*
-    @GetMapping("/employee")
-    public String getEmployee_ID(@RequestParam Long employee,Model model){
-        model.addAttribute("employeeByID", dptService.findByBusID(employee));
-        return "employeeByID";
-    }
-    */
-    @GetMapping("")
+    @GetMapping
     public String getEmployees(@RequestParam(required=false) String department,@RequestParam int pageSize,@RequestParam int pageNum,Model model){
-        List <EmployeeDepartment> employeeList;
-        if(department==null){
-            employeeList=dptService.getAllEmployees(new Page(pageSize,pageNum,"BusinessEntityID"));
-            model.addAttribute("oldest", dptService.findOldest());
-        }else {
-            employeeList=dptService.getAllEmployeesInDpt(department,new Page(pageSize,pageNum,"BusinessEntityID"));
-            model.addAttribute("oldest", dptService.findOldest(department));
+            Thread t1,t2;
+            if(department==null){
+                t1= new Thread(()->{
+                    model.addAttribute("employeeList",dptService.getAllEmployees(new Page(pageSize,pageNum,"BusinessEntityID")));
+                });
+                t2= new Thread(()->{
+                    model.addAttribute("oldest",dptService.getAllEmployees(new Page(pageSize,pageNum,"BusinessEntityID")));
+                });
+            }else {
+                t1= new Thread(()->{
+                    model.addAttribute("employeeList",dptService.getAllEmployeesInDpt(department,new Page(pageSize,pageNum,"BusinessEntityID")));
+                });
+                t2= new Thread(()->{
+                    model.addAttribute("oldest", dptService.findOldest(department));  
+                });
+            }   
+        try {
+            t1.start();
+            t2.start();
+            t1.join();
+            t2.join();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(EmployeeController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        model.addAttribute("employeeList",employeeList);
         return "index";
     }
 }
