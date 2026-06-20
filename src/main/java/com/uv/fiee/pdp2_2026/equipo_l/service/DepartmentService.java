@@ -2,7 +2,6 @@ package com.uv.fiee.pdp2_2026.equipo_l.service;
 
 import com.uv.fiee.pdp2_2026.equipo_l.model.EmployeeDepartment;
 import com.uv.fiee.pdp2_2026.equipo_l.model.Page;
-import com.uv.fiee.pdp2_2026.equipo_l.io.EmployeeDptIO;
 import com.uv.fiee.pdp2_2026.equipo_l.repository.EmployeeDepartmentRepository;
 
 import java.util.List;
@@ -20,9 +19,6 @@ import org.springframework.stereotype.Service;
 public class DepartmentService implements IDepartmentService {
   @Autowired
   private EmployeeDepartmentRepository edrepo;
-
-  @Autowired
-  private EmployeeDptIO fileIO;
 
   @Override
   public List<EmployeeDepartment> getAllEmployees(Page page) {
