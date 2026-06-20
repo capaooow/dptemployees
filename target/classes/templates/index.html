@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html xmlns:th="http:www.thymeleaf.org" lang="en">
   <head>
+    <meta charset="UTF-8" />
     <title>Department Employees</title>
-    <link rel="stylesheet" href="../static/css/style.css" />
-    <!-- th:href="@{/css/style.css}" -->
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
     <!-- FONT -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -11,230 +11,120 @@
       href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap"
       rel="stylesheet"
     />
-    <style>
-      body {
-        background-color: #230c0f;
-        color: #ead637;
-        font-family: "Archivo Black", sans-serif;
-
-        margin: 0;
-        padding: 50px 20px;
-        text-align: center;
-      }
-
-      h1 {
-        text-align: center;
-        text-transform: uppercase;
-        font-family: "Archivo Black", sans-serif;
-        font-size: 4rem;
-        color: #a2d3c2;
-
-        border-bottom: 6px solid #ead637;
-        padding-bottom: 15px;
-        margin-bottom: 40px;
-
-        display: inline-block;
-        width: 100%;
-      }
-
-      form {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 40px auto;
-        max-width: 45rem;
-        width: 100%;
-      }
-
-      input[type="text"] {
-        background-color: #d6f49d;
-        color: #230c0f;
-        font-family: "Archivo Black", sans-serif;
-        font-size: 1.1rem;
-        padding: 15px 20px;
-
-        width: 100%;
-        border: 4px solid #230c0f;
-        border-right: none;
-
-        border-radius: 12px 0 0 12px;
-        outline: none;
-        transition: background-color 0.2s ease;
-      }
-
-      input[type="text"]::placeholder {
-        color: #230c0f;
-        opacity: 0.5;
-      }
-
-      input[type="text"]:focus {
-        background-color: #e2f7b4;
-      }
-
-      button[type="submit"] {
-        background-color: #ead637;
-        color: #230c0f;
-        font-family: "Archivo Black", sans-serif;
-        font-size: 1.1rem;
-        padding: 15px 30px;
-
-        border: 4px solid #230c0f;
-        border-radius: 0 12px 12px 0;
-
-        cursor: pointer;
-        white-space: nowrap;
-        transition: all 0.2s ease;
-      }
-
-      button[type="submit"]:hover {
-        background-color: #230c0f;
-        color: #ead637;
-      }
-
-      button[type="submit"]:active {
-        background-color: #170809;
-      }
-
-      h2 {
-        font-family: "Archivo Black", sans-serif;
-        font-size: 1.2rem;
-        color: #230c0f;
-        background-color: #a2d3c2;
-
-        display: table;
-        margin: 30px auto;
-        padding: 10px 20px;
-
-        border: 4px solid #230c0f;
-        border-radius: 8px;
-        text-transform: uppercase;
-
-        box-shadow: 4px 4px 0px #ead637;
-      }
-
-      table {
-        width: 100%;
-        max-width: 45rem;
-        margin: 40px auto;
-        border-collapse: collapse;
-        font-family: "Archivo Black", sans-serif;
-        background-color: #2c0f13;
-        border: 4px solid #230c0f;
-        border-radius: 12px;
-        overflow: hidden;
-      }
-
-      thead {
-        background-color: #ead637;
-      }
-
-      th {
-        color: #230c0f;
-        padding: 15px;
-        text-align: left;
-        font-size: 0.9rem;
-        text-transform: uppercase;
-      }
-
-      td {
-        padding: 15px;
-        color: #ffffff;
-        border-bottom: 2px solid #230c0f;
-        font-size: 0.85rem;
-      }
-
-      .oldest-employee {
-        background-color: #d6f49d !important;
-      }
-
-      .oldest-employee td {
-        color: #230c0f !important;
-      }
-
-      tfoot tr {
-        background-color: #230c0f;
-      }
-
-      tfoot td {
-        color: #ead637 !important;
-        font-size: 1rem;
-        padding-top: 20px;
-        border-bottom: none;
-      }
-
-      button[type="button"] {
-        background-color: #d6f49d;
-        color: #230c0f;
-        font-family: "Archivo Black", sans-serif;
-        font-size: 1rem;
-        border: 4px solid #230c0f;
-        padding: 12px 30px;
-        border-radius: 8px;
-        cursor: pointer;
-
-        display: block;
-        margin: 30px auto;
-        transition: all 0.2s ease;
-      }
-
-      button[type="button"]:hover {
-        background-color: #230c0f;
-        color: #d6f49d;
-        border-color: #d6f49d;
-      }
-
-      button[type="button"]:active {
-        transform: scale(0.95);
-      }
-    </style>
   </head>
   <body>
-    <h1>Department Employees</h1>
-    <form>
-      <!-- name es como el nombre de la variable que va recibir ese input -->
-      <input
-        type="text"
-        name="department"
-        list="departments"
-        placeholder="Select a department..."
-        required
-      />
-      <datalist id="departments">
-        <option value="Department 1"></option>
-        <option value="Department 2"></option>
-      </datalist>
-      <button type="submit">Search</button>
-    </form>
+    <div class="container">
+      <h1>Department Employees</h1>
 
-    <h2>Department: Department 1</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Department</th>
-          <th>Start Date</th>
-          <th>Job Title</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="oldest-employee">
-          <td>Paola</td>
-          <td>Witrago</td>
-          <td>Technology</td>
-          <td>2026-01-31</td>
-          <td>Software Engineer</td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="4" style="text-align: right; font-weight: bold">
-            Total Employees:
-          </td>
-          <td style="font-weight: bold; text-align: left">1</td>
-        </tr>
-      </tfoot>
-    </table>
-    <button type="button">Save list</button>
+      <form th:action="@{/employee}" method="get" class="search-box">
+        <select name="department" id="department" required>
+          <option
+            value=""
+            disabled
+            th:selected="${currentDepartment == null}"
+            hidden
+          >
+            Select a department...
+          </option>
+          <option>-- All Departments --</option>
+          <option
+            th:each="dpt : ${allDepartments}"
+            th:value="${dpt}"
+            th:text="${dpt}"
+            th:selected="${dpt == currentDepartment}"
+          >
+            Department
+          </option>
+        </select>
+        <button type="submit">Search</button>
+      </form>
+
+      <h2
+        th:text="${currentDepartment != null and !#strings.isEmpty(currentDepartment)}
+                   ? 'Department: ' + ${currentDepartment}
+                   : 'Department: All'"
+      >
+        Department: All
+      </h2>
+
+      <div th:if="${not #lists.isEmpty(employeeList)}">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Department</th>
+              <th>Start Date</th>
+              <th>Job Title</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              th:each="emp : ${employeeList}"
+              th:class="${oldest != null and emp.id == oldest.id} ? 'oldest-employee' : ''"
+            >
+              <td th:text="${emp.id}">1</td>
+              <td th:text="${emp.firstName}">Paola</td>
+              <td th:text="${emp.lastName}">Witrago</td>
+              <td th:text="${emp.department}">Technology</td>
+              <td th:text="${emp.startDate}">2026-01-31</td>
+              <td th:text="${emp.jobTitle}">Software Engineer</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td
+                colspan="5"
+                style="
+                  text-align: right;
+                  font-weight: bold;
+                  text-transform: uppercase;
+                "
+              >
+                Total Employees:
+              </td>
+              <td
+                style="font-weight: bold; text-align: left"
+                th:text="${totalEmployees}"
+              >
+                1
+              </td>
+            </tr>
+            <tr th:if="${oldest != null}">
+              <td
+                colspan="5"
+                style="
+                  text-align: right;
+                  font-weight: bold;
+                  text-transform: uppercase;
+                "
+              >
+                Most Senior Employee:
+              </td>
+              <td
+                style="font-weight: bold; text-align: left"
+                th:text="${oldest.getFirstName()} + ' ' + ${oldest.getLastName()}"
+              >
+                Paola Witrago
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div
+        th:if="${#lists.isEmpty(employeeList)}"
+        style="
+          text-align: center;
+          padding: 30px;
+          background-color: #27273a;
+          border-radius: 6px;
+          margin-top: 20px;
+        "
+      >
+        No records found.
+      </div>
+    </div>
   </body>
 </html>

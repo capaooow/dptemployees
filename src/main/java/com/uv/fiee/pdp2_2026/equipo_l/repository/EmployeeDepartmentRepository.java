@@ -6,13 +6,20 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 /*
- *  Repositorio encargado de las consultas a la vista vEmployeeDepartment.
+ *  Repositorio encargado de las consultas a la vista de Azure.
  */
 
 @Repository
 public interface EmployeeDepartmentRepository extends JpaRepository<EmployeeDepartment, Integer> {
+  /*
+   * Obtiene todos los empleados de la base de datos de forma paginada.
+   */
+  @Query("SELECT e FROM EmployeeDepartment e")
+  List<EmployeeDepartment> findAllEmployees(Pageable pageable);
+
   /*
    * Busca y retorna la lista de empleados filtrados por su departamento.
    * 
@@ -20,7 +27,7 @@ public interface EmployeeDepartmentRepository extends JpaRepository<EmployeeDepa
    * 
    * @return: Una colección List con los empleados encontrados.
    */
-  List<EmployeeDepartment> findByDepartment(String department);
+  List<EmployeeDepartment> findByDepartment(String department, Pageable pageable);
 
   /*
    * Busca y retorna la lista de departamentos que existen.

@@ -12,7 +12,7 @@ import java.time.LocalDate;
  */
 
 @Entity
-@Table(name = "v_employee_department", schema = "human_resources")
+@Table(name = "vEmployeeDepartment", schema = "HumanResources")
 @Immutable
 public class EmployeeDepartment {
 
@@ -97,5 +97,15 @@ public class EmployeeDepartment {
 
   public void setStartDate(LocalDate startDate) {
     this.startDate = startDate;
+  }
+
+  @Override
+  public String toString() {
+    return id + "," +
+        firstName + "," +
+        lastName + "," +
+        department + "," +
+        jobTitle + "," +
+        startDate;
   }
 }
