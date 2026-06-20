@@ -44,7 +44,7 @@ public class DepartmentService implements IDepartmentService {
 
     // Conexión a Azure.
     List<EmployeeDepartment> employees;
-    if (department == null || department.trim().isEmpty()) {
+    if (department == null || department.trim().isEmpty() || department.equals("-- All Departments --")) {
       employees = getAllEmployees(page);
     } else {
       employees = getAllEmployeesInDpt(department, page);
@@ -71,25 +71,35 @@ public class DepartmentService implements IDepartmentService {
 
     // Primer hilo: Hilo que manda la cantidad de empleados de cierto departamento.
     Thread t1 = new Thread(() -> {
-      totalCounter[0] = employees.size();
+      if (department == null || department.trim().isEmpty() || department.equals("-- All Departments --")) {
+        totalCounter[0] = (int) edrepo.count();
+      } else {
+        totalCounter[0] = employees.size();
+      }
     });
 
     // Segundo hilo: Hilo que calcula el empleado más antiguo en cierto
     // departamento.
     Thread t2 = new Thread(() -> {
-      if (employees.isEmpty()) {
-        oldestEmployee[0] = null;
-        return;
-      }
-
-      EmployeeDepartment theOldest = employees.get(0);
-      for (EmployeeDepartment emp : employees) {
-        if (emp.getStartDate().isBefore(theOldest.getStartDate())) {
-          theOldest = emp;
+      if (department == null || department.trim().isEmpty() || department.equals("-- All Departments --")) {
+        List<EmployeeDepartment> globalOldest = edrepo
+            .findAll(PageRequest.of(0, 1, Sort.by(Sort.Direction.ASC, "startDate"))).getContent();
+        oldestEmployee[0] = globalOldest.isEmpty() ? null : globalOldest.get(0);
+      } else {
+        if (employees.isEmpty()) {
+          oldestEmployee[0] = null;
+          return;
         }
-      }
 
-      oldestEmployee[0] = theOldest;
+        EmployeeDepartment theOldest = employees.get(0);
+        for (EmployeeDepartment emp : employees) {
+          if (emp.getStartDate().isBefore(theOldest.getStartDate())) {
+            theOldest = emp;
+          }
+        }
+
+        oldestEmployee[0] = theOldest;
+      }
     });
 
     try {

@@ -25,13 +25,16 @@ public class EmployeeController {
       @RequestParam(defaultValue = "1") int pageNum,
       Model model) {
 
-    if (department != null && department.trim().isEmpty()) {
+    if (department != null && (department.trim().isEmpty() || department.equals("-- All Departments --"))) {
       department = null;
     }
 
     Page page = new Page(pageSize, pageNum, "id");
 
     Map<String, Object> results = dptService.processDepartmentWithThreads(department, page);
+
+    int totalEmployees = (int) results.get("totalEmployeesCalculated");
+    int pageCount = (totalEmployees == 0) ? 1 : (int) Math.ceil((double) totalEmployees / pageSize);
 
     // Lista de empleados.
     model.addAttribute("employeeList", results.get("employeeList"));
@@ -42,6 +45,11 @@ public class EmployeeController {
 
     // Para la búsqueda de los departamentos únicos.
     model.addAttribute("allDepartments", dptService.findDistinctDepartments());
+
+    // Para los botones de vista.
+    model.addAttribute("pageCount", pageCount);
+    model.addAttribute("pageNum", pageNum);
+    model.addAttribute("pageSize", pageSize);
 
     // Departamento seleccionado por el usuario.
     model.addAttribute("currentDepartment", department);
@@ -55,7 +63,7 @@ public class EmployeeController {
       @RequestParam(required = false) String department,
       @RequestParam(defaultValue = "500") int pageSize,
       @RequestParam(defaultValue = "1") int pageNum) {
-    if (department != null && department.trim().isEmpty()) {
+    if (department != null && (department.trim().isEmpty() || department.equals("-- All Departments --"))) {
       department = null;
     }
 

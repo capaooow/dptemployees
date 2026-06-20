@@ -17,16 +17,10 @@
       <h1>Department Employees</h1>
 
       <form th:action="@{/employee}" method="get" class="search-box">
-        <select name="department" id="department" required>
-          <option
-            value=""
-            disabled
-            th:selected="${currentDepartment == null}"
-            hidden
-          >
-            Select a department...
+        <select name="department" id="department">
+          <option value="" th:selected="${currentDepartment == null}">
+            -- All Departments --
           </option>
-          <option>-- All Departments --</option>
           <option
             th:each="dpt : ${allDepartments}"
             th:value="${dpt}"
@@ -50,7 +44,7 @@
       <div th:if="${not #lists.isEmpty(employeeList)}">
         <div class="download-container">
           <a
-            th:href="@{/employee/download(department=${currentDepartment})}"
+            th:href="@{/employee/download(department=${currentDepartment},pageNum=${pageNum},pageSize=${pageSize})}"
             class="download-btn"
           >
             Export to CSV
@@ -116,6 +110,34 @@
                 th:text="${oldest.getFirstName()} + ' ' + ${oldest.getLastName()}"
               >
                 Paola Witrago
+              </td>
+            </tr>
+            <tr th:if="${!employeeList.isEmpty()}">
+              <td colspan="2">
+                <a
+                  th:if="${pageNum>1}"
+                  th:href="@{/employee(department=${currentDepartment},pageNum=${pageNum-1},pageSize=${pageSize})}"
+                >
+                  <button class="page-btn">Previous Page</button>
+                </a>
+                <button class="page-btn" th:unless="${pageNum>1}">
+                  Previous Page
+                </button>
+              </td>
+              <td
+                colspan="2"
+                th:text="'Page: ' + ${pageNum} + '/' + ${pageCount}"
+              ></td>
+              <td colspan="2">
+                <a
+                  th:if="${pageNum<pageCount}"
+                  th:href="@{/employee(department=${currentDepartment},pageNum=${pageNum+1},pageSize=${pageSize})}"
+                >
+                  <button class="page-btn">Next Page</button>
+                </a>
+                <button class="page-btn" th:unless="${pageNum<pageCount}">
+                  Next Page
+                </button>
               </td>
             </tr>
           </tfoot>
