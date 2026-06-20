@@ -57,15 +57,18 @@ public class DepartmentService implements IDepartmentService {
     // Guardar la lista para la tabla de la página.
     result.put("employeeList", employees);
 
-    if (!employees.isEmpty()) {
-      String fileName = (department == null || department.trim().isEmpty())
-          ? "All"
-          : department.trim().replace(" ", "_");
-
-      String dir = "src/main/resources/data/result_" + fileName + ".csv";
-
-      fileIO.write(employees, dir);
+    StringBuilder csvBuilder = new StringBuilder();
+    csvBuilder.append("ID,First Name,Last Name,Department,Start Date,Job Title\n");
+    for (EmployeeDepartment emp : employees) {
+      csvBuilder.append(emp.getId()).append(",")
+          .append(emp.getFirstName()).append(",")
+          .append(emp.getLastName()).append(",")
+          .append(emp.getDepartment()).append(",")
+          .append(emp.getStartDate()).append(",")
+          .append(emp.getJobTitle()).append("\n");
     }
+
+    result.put("csvData", csvBuilder.toString());
 
     final int[] totalCounter = new int[1];
     final EmployeeDepartment[] oldestEmployee = new EmployeeDepartment[1];

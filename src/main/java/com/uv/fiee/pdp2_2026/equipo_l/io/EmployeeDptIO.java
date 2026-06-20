@@ -59,12 +59,16 @@ public class EmployeeDptIO {
     File file = new File(dir);
     try (FileWriter fw = new FileWriter(file)) {
       if (!lista.isEmpty()) {
-        fw.write("ID,First Name,Last Name,Department,Job Title,Start Date\n");
+        fw.write("ID,First Name,Last Name,Department,Start Date,Job Title\n");
       }
 
-      ListIterator<EmployeeDepartment> li = lista.listIterator();
-      while (li.hasNext()) {
-        fw.write(li.next().toString() + "\n");
+      for (EmployeeDepartment emp : lista) {
+        fw.write(emp.getId() + "," +
+            emp.getFirstName() + "," +
+            emp.getLastName() + "," +
+            emp.getDepartment() + "," +
+            emp.getStartDate() + "," +
+            emp.getJobTitle() + "\n");
       }
       System.out.println("File Write Succesful!");
     } catch (IOException ex) {
