@@ -50,29 +50,31 @@ public class EmployeeController {
     return "index";
   }
 
-  @GetMapping("/download")
-  public org.springframework.http.ResponseEntity<byte[]> downloadCsv(
-      @RequestParam(required = false) String department,
-      @RequestParam(defaultValue = "500") int pageSize,
-      @RequestParam(defaultValue = "1") int pageNum) {
-    if (department != null && department.trim().isEmpty()) {
-      department = null;
-    }
-
-    Page page = new Page(pageSize, pageNum, "id");
-
-    Map<String, Object> results = dptService.processDepartmentWithThreads(department, page);
+  
+  private byte[] csvBytes(String department,Page page){
+     Map<String, Object> results = dptService.processDepartmentWithThreads(department, page);
 
     String csvText = (String) results.get("csvData");
     if (csvText == null) {
       csvText = "ID,First Name,Last Name,Department,Start Date,Job Title\n";
     }
-
     byte[] csvBytes = csvText.getBytes(java.nio.charset.StandardCharsets.UTF_8);
-
+    return csvBytes;
+  }
+    //Metodo que junta todos los csvbytes de una pagina.
+    
+  @GetMapping("/download")
+  public org.springframework.http.ResponseEntity<byte[]> downloadCsv(
+      @RequestParam(required = false) String department,
+      @RequestParam(defaultValue = "500") int pageSize,
+      @RequestParam(defaultValue = "1") int pageNum) {
+    if (department.trim().isEmpty()) {
+      department = null;
+    }
+    Page page = new Page(pageSize, pageNum, "id");
     String filename = (department == null)
-        ? "All_Employees.csv"
-        : department.trim().replace(" ", "_") + "_Employees.csv";
+        ? "All_Employees_Page"+pageNum+".csv"
+        : department.trim().replace(" ", "_") + "_Employees_Page"+pageNum+".csv";
 
     org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
     headers.setContentType(org.springframework.http.MediaType.parseMediaType("text/csv"));
@@ -80,6 +82,6 @@ public class EmployeeController {
 
     return org.springframework.http.ResponseEntity.ok()
         .headers(headers)
-        .body(csvBytes);
+        .body(csvBytes(department,page));
   }
 }

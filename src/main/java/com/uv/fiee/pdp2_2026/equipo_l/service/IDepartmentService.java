@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 public interface IDepartmentService {
-  List<EmployeeDepartment> getAllEmployees(Page page);
+  List<EmployeeDepartment> getAllEmployees(String department, Page page);
 
-  List<EmployeeDepartment> getAllEmployeesInDpt(String department, Page page);
-
+  Long getEmployeeCount(String department);
+  
+  EmployeeDepartment getSeniorEmployee(String department);
+  
   List<String> findDistinctDepartments();
 
   Map<String, Object> processDepartmentWithThreads(String department, Page page);

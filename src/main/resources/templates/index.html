@@ -26,7 +26,7 @@
           >
             Select a department...
           </option>
-          <option>-- All Departments --</option>
+          <option value="">-- All Departments --</option>
           <option
             th:each="dpt : ${allDepartments}"
             th:value="${dpt}"
@@ -50,7 +50,7 @@
       <div th:if="${not #lists.isEmpty(employeeList)}">
         <div class="download-container">
           <a
-            th:href="@{/employee/download(department=${currentDepartment})}"
+            th:href="@{/employee/download(department=${currentDepartment},pageNum=${pageNum},pageSize={$pageSize})}"
             class="download-btn"
           >
             Export to CSV

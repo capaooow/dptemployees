@@ -19,19 +19,27 @@ import org.springframework.stereotype.Service;
 public class DepartmentService implements IDepartmentService {
   @Autowired
   private EmployeeDepartmentRepository edrepo;
-
   @Override
-  public List<EmployeeDepartment> getAllEmployees(Page page) {
-    return edrepo
-        .findAllEmployees(PageRequest.of(page.number() - 1, page.size(), Sort.by(Sort.Order.asc(page.sort()))));
-  }
-
-  @Override
-  public List<EmployeeDepartment> getAllEmployeesInDpt(String department, Page page) {
+  public List<EmployeeDepartment> getAllEmployees(String department,Page page) {
+    if(department==null|| department.trim().isEmpty())
+        return edrepo
+            .findAllEmployees(PageRequest.of(page.number() - 1, page.size(), Sort.by(Sort.Order.asc(page.sort()))));
     return edrepo.findByDepartment(department,
         PageRequest.of(page.number() - 1, page.size(), Sort.by(Sort.Order.asc(page.sort()))));
   }
-
+  @Override
+  public EmployeeDepartment getSeniorEmployee(String department) {
+    if(department==null)
+        return edrepo.getSeniorEmployee();
+    return edrepo.getSeniorEmployeeInDpt(department);
+    }
+  
+  @Override
+  public Long getEmployeeCount(String department) {
+    if(department==null)
+        return edrepo.getEmployeeCount();
+    return edrepo.getEmployeeCountInDpt(department);
+  }
   @Override
   public List<String> findDistinctDepartments() {
     return edrepo.findDistinctDepartments();
@@ -41,18 +49,11 @@ public class DepartmentService implements IDepartmentService {
   @Override
   public Map<String, Object> processDepartmentWithThreads(String department, Page page) {
     Map<String, Object> result = new HashMap<>();
-
     // Conexión a Azure.
     List<EmployeeDepartment> employees;
-    if (department == null || department.trim().isEmpty()) {
-      employees = getAllEmployees(page);
-    } else {
-      employees = getAllEmployeesInDpt(department, page);
-    }
-
+    employees = getAllEmployees(department,page);
     // Guardar la lista para la tabla de la página.
     result.put("employeeList", employees);
-
     StringBuilder csvBuilder = new StringBuilder();
     csvBuilder.append("ID,First Name,Last Name,Department,Start Date,Job Title\n");
     for (EmployeeDepartment emp : employees) {
@@ -63,33 +64,28 @@ public class DepartmentService implements IDepartmentService {
           .append(emp.getStartDate()).append(",")
           .append(emp.getJobTitle()).append("\n");
     }
-
     result.put("csvData", csvBuilder.toString());
-
-    final int[] totalCounter = new int[1];
-    final EmployeeDepartment[] oldestEmployee = new EmployeeDepartment[1];
-
     // Primer hilo: Hilo que manda la cantidad de empleados de cierto departamento.
     Thread t1 = new Thread(() -> {
-      totalCounter[0] = employees.size();
+        result.put("totalEmployeesInPage", employees.size());
+        long employeeCount=getEmployeeCount(department);
+        result.put("totalEmployeesCalculated", employeeCount);
+        result.put("pageCount", employeeCount/employees.size());
     });
-
     // Segundo hilo: Hilo que calcula el empleado más antiguo en cierto
     // departamento.
     Thread t2 = new Thread(() -> {
       if (employees.isEmpty()) {
-        oldestEmployee[0] = null;
+        result.put("oldestEmployeeCalculated", null);
         return;
       }
-
       EmployeeDepartment theOldest = employees.get(0);
       for (EmployeeDepartment emp : employees) {
         if (emp.getStartDate().isBefore(theOldest.getStartDate())) {
           theOldest = emp;
         }
       }
-
-      oldestEmployee[0] = theOldest;
+      result.put("oldestEmployeeCalculated", getSeniorEmployee(department));
     });
 
     try {
@@ -102,10 +98,8 @@ public class DepartmentService implements IDepartmentService {
           ex);
       Thread.currentThread().interrupt();
     }
-
-    result.put("totalEmployeesCalculated", totalCounter[0]);
-    result.put("oldestEmployeeCalculated", oldestEmployee[0]);
-
     return result;
   }
+
+    
 }

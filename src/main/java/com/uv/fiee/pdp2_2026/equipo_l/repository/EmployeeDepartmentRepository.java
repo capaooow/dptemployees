@@ -19,7 +19,8 @@ public interface EmployeeDepartmentRepository extends JpaRepository<EmployeeDepa
    */
   @Query("SELECT e FROM EmployeeDepartment e")
   List<EmployeeDepartment> findAllEmployees(Pageable pageable);
-
+  @Query("SELECT Count(BusinessEntityID)as Cuenta FROM EmployeeDepartment e")
+  Long getEmployeeCount();
   /*
    * Busca y retorna la lista de empleados filtrados por su departamento.
    * 
@@ -28,7 +29,12 @@ public interface EmployeeDepartmentRepository extends JpaRepository<EmployeeDepa
    * @return: Una colección List con los empleados encontrados.
    */
   List<EmployeeDepartment> findByDepartment(String department, Pageable pageable);
-
+  @Query("SELECT Count(BusinessEntityID)as Cuenta FROM EmployeeDepartment e WHERE Department=?1")
+  Long getEmployeeCountInDpt(String department);
+  @Query("SELECT TOP 1 e FROM EmployeeDepartment e ORDER BY StartDate ASC")
+  EmployeeDepartment getSeniorEmployee();
+  @Query("SELECT TOP 1 e FROM EmployeeDepartment e WHERE Department=?1 ORDER BY StartDate ASC")
+  EmployeeDepartment getSeniorEmployeeInDpt(String department);
   /*
    * Busca y retorna la lista de departamentos que existen.
    * 
