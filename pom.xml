@@ -66,6 +66,41 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
+
+      <plugin>
+        <groupId>com.microsoft.azure</groupId>
+        <artifactId>azure-webapp-maven-plugin</artifactId>
+        <version>2.13.0</version>
+        <configuration>
+          <resourceGroup>paradigmas-2-2026</resourceGroup>
+          <appName>pdp2adventureworkssite</appName>
+          <region>Central US</region>
+
+          <runtime>
+            <os>Linux</os>
+            <javaVersion>Java 21</javaVersion>
+            <webContainer>Java SE</webContainer>
+          </runtime>
+
+          <appSettings>
+            <property>
+              <name>JAVA_OPTS</name>
+              <value>-Dserver.port=8080</value>
+            </property>
+          </appSettings>
+
+          <deployment>
+            <resources>
+              <resource>
+                <directory>${project.basedir}/target</directory>
+                <includes>
+                  <include>*.jar</include>
+                </includes>
+              </resource>
+            </resources>
+          </deployment>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 </project>
