@@ -53,9 +53,16 @@ public class DepartmentService implements IDepartmentService {
     // Guardar la lista para la tabla de la página.
     result.put("employeeList", employees);
 
+    List<EmployeeDepartment> allEmployees4Csv;
+    if (department == null || department.trim().isEmpty() || department.equals("-- All Deparments --")) {
+      allEmployees4Csv = edrepo.findAll();
+    } else {
+      allEmployees4Csv = edrepo.findByDepartment(department, org.springframework.data.domain.PageRequest.of(0, 10000));
+    }
+
     StringBuilder csvBuilder = new StringBuilder();
     csvBuilder.append("ID,First Name,Last Name,Department,Start Date,Job Title\n");
-    for (EmployeeDepartment emp : employees) {
+    for (EmployeeDepartment emp : allEmployees4Csv) {
       csvBuilder.append(emp.getId()).append(",")
           .append(emp.getFirstName()).append(",")
           .append(emp.getLastName()).append(",")
