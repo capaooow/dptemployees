@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>Department Employees</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" href="@{/css/style.css}" />
     <!-- FONT -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -82,7 +82,7 @@
             </tr>
           </tbody>
           <tfoot>
-            <tr>
+            <tr th:if="${!employeeList.isEmpty()}">
               <td
                 colspan="5"
                 style="
@@ -116,6 +116,23 @@
                 th:text="${oldest.getFirstName()} + ' ' + ${oldest.getLastName()}"
               >
                 Paola Witrago
+              </td>
+            </tr>
+            <tr th:if="${!employeeList.isEmpty()}">
+              <td colspan="2">
+                  <a th:if="${pageNum>1}"
+              th:href="@{(department=${currentDepartment},pageNum=${pageNum-1},pageSize={$pageSize})}">
+                <button class="page-btn">Previous Page</button>
+                </a>
+                <button class="page-btn" th:unless="${pageNum>1}">Previous Page</button>
+              </td >
+              <td colspan="2" th:text="Page: ${pageNum}/${pageCount}"></td>
+              <td colspan="2">
+                <a th:if="${pageNum<pageCount}"
+              th:href="@{(department=${currentDepartment},pageNum=${pageNum+1},pageSize={$pageSize})}">
+                <button class="page-btn">Next Page</button>
+              </a>
+              <button class="page-btn" th:unless="${pageNum<pageCount}">Next Page</button>
               </td>
             </tr>
           </tfoot>

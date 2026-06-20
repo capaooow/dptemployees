@@ -44,58 +44,51 @@ public class DepartmentService implements IDepartmentService {
   public List<String> findDistinctDepartments() {
     return edrepo.findDistinctDepartments();
   }
-
+  @Override
+  public String buildCSVString(List<EmployeeDepartment> employees){
+      StringBuilder csvBuilder = new StringBuilder();
+      //Construye el string representante del archivo csv.
+      for (EmployeeDepartment emp : employees) {
+        csvBuilder.append(emp.getId()).append(",")
+            .append(emp.getFirstName()).append(",")
+            .append(emp.getLastName()).append(",")
+            .append(emp.getDepartment()).append(",")
+            .append(emp.getStartDate()).append(",")
+            .append(emp.getJobTitle()).append("\n");
+      }
+      return csvBuilder.toString();
+  }
   // Threads
   @Override
   public Map<String, Object> processDepartmentWithThreads(String department, Page page) {
     Map<String, Object> result = new HashMap<>();
-    // Conexión a Azure.
-    List<EmployeeDepartment> employees;
-    employees = getAllEmployees(department,page);
-    // Guardar la lista para la tabla de la página.
-    result.put("employeeList", employees);
-    StringBuilder csvBuilder = new StringBuilder();
-    csvBuilder.append("ID,First Name,Last Name,Department,Start Date,Job Title\n");
-    for (EmployeeDepartment emp : employees) {
-      csvBuilder.append(emp.getId()).append(",")
-          .append(emp.getFirstName()).append(",")
-          .append(emp.getLastName()).append(",")
-          .append(emp.getDepartment()).append(",")
-          .append(emp.getStartDate()).append(",")
-          .append(emp.getJobTitle()).append("\n");
-    }
-    result.put("csvData", csvBuilder.toString());
+    // Obten la informacion relevante a los empleados de esta pagina.
+    List<EmployeeDepartment> employees = getAllEmployees(department,page);
     // Primer hilo: Hilo que manda la cantidad de empleados de cierto departamento.
     Thread t1 = new Thread(() -> {
-        result.put("totalEmployeesInPage", employees.size());
-        long employeeCount=getEmployeeCount(department);
-        result.put("totalEmployeesCalculated", employeeCount);
-        result.put("pageCount", employeeCount/employees.size());
+        result.put("totalEmployeesCalculated", getEmployeeCount(department));
     });
-    // Segundo hilo: Hilo que calcula el empleado más antiguo en cierto
-    // departamento.
+    // Segundo hilo: Hilo que calcula el empleado más antiguo en cierto departamento.
     Thread t2 = new Thread(() -> {
-      if (employees.isEmpty()) {
-        result.put("oldestEmployeeCalculated", null);
-        return;
-      }
-      EmployeeDepartment theOldest = employees.get(0);
-      for (EmployeeDepartment emp : employees) {
-        if (emp.getStartDate().isBefore(theOldest.getStartDate())) {
-          theOldest = emp;
-        }
-      }
-      result.put("oldestEmployeeCalculated", getSeniorEmployee(department));
+      result.put("oldestEmployee", getSeniorEmployee(department));
     });
-
+    t1.start();
+    t2.start();
+    //MIENTRAS SE EJECUTAN LOS HILOS, hacemos otras operaciones!
+    // Guardar la lista para la tabla de la página.
+    result.put("employeeList", employees);
+    //Guardar informacion relevante a paginacion
+    result.put("totalEmployeesInPage", employees.size());
+    result.put("pageNum",page.number());
+    result.put("pageCount", page.size()/employees.size());
+    //Guardar info de CSV
+    result.put("csvData", buildCSVString(employees));
+    //REALIZAR JOIN CON LOS HILOS
     try {
-      t1.start();
-      t2.start();
       t1.join();
       t2.join();
     } catch (InterruptedException ex) {
-      Logger.getLogger(DepartmentService.class.getName()).log(Level.SEVERE, "Fallo en la concurrencia de los hilos",
-          ex);
+      Logger.getLogger(DepartmentService.class.getName()).log(Level.SEVERE, "Fallo en la concurrencia de los hilos",ex);
       Thread.currentThread().interrupt();
     }
     return result;

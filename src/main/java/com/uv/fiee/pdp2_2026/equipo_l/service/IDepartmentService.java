@@ -15,4 +15,6 @@ public interface IDepartmentService {
   List<String> findDistinctDepartments();
 
   Map<String, Object> processDepartmentWithThreads(String department, Page page);
+  
+  String buildCSVString(List<EmployeeDepartment> employees);
 }
